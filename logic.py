@@ -21,8 +21,6 @@ def read_categorical(A, V, Y):
 
 read_categorical.arity = 3
 
-registerForeign(read_py)
-registerForeign(write_py)
 registerForeign(read_categorical)
 
 prolog.consult("expert.pl") # open the KB for consulting
