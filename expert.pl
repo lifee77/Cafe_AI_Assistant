@@ -3,7 +3,9 @@
 
 %Attendant Coffee Roasters - Shoreditch
 %closes at 5pm
-recommend(acr):- \+wifi(strong),
+recommend(acr):-
+	init_tui,
+	\+wifi(strong),
 	\+budget_category(one),
 	noise_level(noisy),
 	arrive_mean_time(Y), length_stay(Z), Y + Z =< 17,
@@ -72,13 +74,16 @@ recommend(pret_a):- noise_level(noisy),
 	\+dinner,
 	travel_distance(X), X >= 0.4.
 
+init_tui:- ask(init_tui, _). %This is just an initialising dummy for the tui to startup
+
 wifi(strong):- work(meeting), assertz(known(wifi, strong)).
 wifi(X):- ask(wifi, X). % strong, normal, none
+work(X):- ask(work, X). % work can have values meeting, no_meeting, none
+
 noise_level(quiet):- wifi(strong).
 noise_level(X):- ask(noise_level, X). %noise_level can have values quiet, moderate, noisy (or maybe dont_care for last option)
-work(X):- ask(work, X). % work can have values meeting, no_meeting, none
 computer(X):- ask(computer, X). % computer can have values need_charge, no_need_charge
-diet_restrictions(X):- ask(diet_restriction, X). % diet_restrictions is a list of values vegan, vegt, gluten_free, none.
+diet_restrictions(X):- ask(diet_restrictions, X). % diet_restrictions is a list of values vegan, vegt, gluten_free, none.
 %represents diet restrictions that the user is okay with
 %[vegan, gluten_free] means that the user is fine with vegan or gluten_free or both
 %[none] indicates the user is okay with any diet

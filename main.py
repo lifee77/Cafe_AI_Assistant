@@ -8,7 +8,7 @@ from textual.reactive import reactive
 
 from logic import run_expert_system
 
-shared_data = {"curr_question": {"text": "Hello", "type": "single_choice", "options": [], "default": "None"}}
+shared_data = {"curr_question": {"text": "Hello", "type": "single_choice", "options": [], "default": "Init"}}
 
 
 # def init_worker(data):
@@ -56,7 +56,7 @@ class RadioSetChangedApp(App[None]):
             yield Button("Next", id="start", variant="success")
 
     def on_button_pressed(self, event: Button.Pressed) -> None:
-        shared_data[f"{shared_data['curr_question']['text']}_response"] = [
+        shared_data[f"{shared_data['curr_question']['id']}_response"] = [
             self.selected_value
         ]
         time.sleep(0.1)  # maybe wait for prolog?
@@ -64,7 +64,9 @@ class RadioSetChangedApp(App[None]):
         for btn in self.query("RadioButton"):
         	btn.remove()
         for opt in shared_data["curr_question"]["options"]:
-        	self.query_one("#focus_me").mount(RadioButton(opt, )) # value = opt==shared_data["curr_question"]["default"]
+        	radioset = self.query_one("#focus_me")
+        	radioset.mount(RadioButton(opt, )) # value = opt==shared_data["curr_question"]["default"]
+        	radioset.focus()
 
     def on_mount(self) -> None:
         self.query_one(RadioSet).focus()
@@ -82,6 +84,7 @@ if __name__ == "__main__":
     p1 = Process(target=run_expert_system, args=(shared_data,))
     # p2 = Process(target=app_func, args=(shared_data,))
     p1.start()
+
     RadioSetChangedApp().run()
     # p2.start()
     p1.join()
