@@ -17,7 +17,16 @@ from textual import on
 
 from logic import run_expert_system
 
-shared_data = {"curr_question": {"default": "None"}}
+shared_data = {
+    "curr_question": {
+        "id": "no_id",
+        "text": "Hello and welcome to the AI Cafe Recommender Assistant.\n\
+I can recommend a lovely cafe in London based on your preferences.\nClick Next to begin.",
+        "type": "single_choice",
+        "options": [],
+        "default": "None",
+    }
+}
 
 
 class RecommenderApp(App[None]):
@@ -123,6 +132,7 @@ if __name__ == "__main__":
     shared_data = manager.dict(
         {
             "curr_question": {
+                "id": "no_id",
                 "text": "Hello and welcome to the AI Cafe Recommender Assistant.\n\
 I can recommend a lovely cafe in London based on your preferences.\nClick Next to begin.",
                 "type": "single_choice",
