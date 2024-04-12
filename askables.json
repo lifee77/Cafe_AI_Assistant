@@ -113,7 +113,8 @@
             {"id": "td_a", "text": "15 minute walk (about 1 mile)", "value": "0.8"},
             {"id":"td_b", "text": "30 minute walk (about 1.5 miles)", "value": "1.6"},
             {"id": "td_c", "text": "45 minute walk (about 2.5 miles)", "value": "2.4"},
-            {"id": "td_d", "text": "30 minute bus ride (about 4 miles)", "value": "4.0"}
+            {"id": "td_d", "text": "30 minute bus ride (about 4 miles)", "value": "4.0"},
+            {"id": "td_e", "text": "I don't care about travel distance", "value": "10.0"}
         ],
         "default": "td_d",
         "type": "single_choice"
