@@ -3,8 +3,9 @@ import time
 
 from textual.app import App, ComposeResult
 from textual.containers import Horizontal, VerticalScroll
-from textual.widgets import Label, RadioButton, RadioSet, Button
+from textual.widgets import Label, RadioButton, RadioSet, Button, SelectionList
 from textual.reactive import reactive
+from textual import on
 
 from logic import run_expert_system
 
@@ -40,34 +41,36 @@ shared_data = {"curr_question": {"text": "Hello", "type": "single_choice", "opti
 
 class RadioSetChangedApp(App[None]):
     CSS_PATH = "tut.tcss"
-    selected_value = reactive(shared_data["curr_question"]["default"])
+    selected_values = reactive([shared_data["curr_question"]["default"]])
     about_to_finish = False
+    started = False
+    has_radio = True
 
     def compose(self) -> ComposeResult:
         # with VerticalScroll():
         with Horizontal():
             yield Label(shared_data["curr_question"]["text"], id="curr_question")
-        with Horizontal():
-            with RadioSet(id="focus_me"):
-                for opt in shared_data["curr_question"]["options"]:
-                    yield RadioButton(opt["text"], id=opt["id"])
+        with Horizontal(id="focus_me"):
+            pass
                 
         with Horizontal():
-            #yield Label(self.selected_value, id="selected")
             yield Button("Next", id="next_btn", variant="success")
 
     def on_button_pressed(self, event: Button.Pressed) -> None:
         if self.about_to_finish:
             self.exit()
             return
-        shared_data[f"{shared_data['curr_question']['id']}_response"] = [
-            self.selected_value
-        ]
+        shared_data[f"{shared_data['curr_question']['id']}_response"] = self.selected_values
+
         time.sleep(0.1)  # maybe wait for prolog?
         if not shared_data.get("done"):
             self.query_one("#curr_question", Label).update(shared_data["curr_question"]["text"])
-        for btn in self.query("RadioButton"):
-            btn.remove()
+
+        if self.started and self.has_radio:
+            self.query_one(RadioSet).remove()
+        elif self.started:
+            self.query_one(SelectionList).remove()
+
         if shared_data.get("done"):
             link = shared_data["rec"]["link"]
             self.query_one("#focus_me").remove()
@@ -78,24 +81,46 @@ class RadioSetChangedApp(App[None]):
             )
             self.about_to_finish = True
         else:
-            for opt in shared_data["curr_question"]["options"]:
-                radioset = self.query_one("#focus_me")
-                radioset.mount(RadioButton(opt["text"], id=opt["id"])) # value = opt==shared_data["curr_question"]["default"]
-                radioset.focus()
+            self.started = True
+            if shared_data["curr_question"]["type"] == "single_choice":
+                radioset = RadioSet()
+                self.query_one("#focus_me").mount(radioset)
+                for opt in shared_data["curr_question"]["options"]:
+                    radioset.mount(RadioButton(opt["text"], id=opt["id"])) # value = opt==shared_data["curr_question"]["default"]
+                    radioset.focus()
+                self.has_radio = True
+            else:
+                self.query_one("#focus_me").mount(
+                    SelectionList(*[(opt["text"], opt["id"], opt["id"] == shared_data["curr_question"]["default"])
+                        for opt in shared_data["curr_question"]["options"]]
+                    )
+                )
+                self.has_radio = False
 
     def on_mount(self) -> None:
-        self.query_one(RadioSet).focus()
+        self.query_one("#focus_me").focus()
 
     def on_radio_set_changed(self, event: RadioSet.Changed) -> None:
-        self.selected_value = str(event.pressed.id)
-        # self.query_one("#selected", Label).update(
-        #     f"Selected label: {self.selected_value}"
-        # )
+        self.selected_values = [str(event.pressed.id)]
+
+    @on(SelectionList.SelectedChanged)
+    def update_selected_values(self) -> None:
+        self.selected_values = self.query_one(SelectionList).selected
+
+
 
 
 if __name__ == "__main__":
     manager = Manager()
-    shared_data = manager.dict({"curr_question": {"text": "Hello", "type": "single_choice", "options": [], "default": "None"}})
+    shared_data = manager.dict(
+        {"curr_question": {
+            "text": "Hello and welcome to the AI Cafe Recommender Assistant.\n\
+I can recommend a lovely cafe in London based on your preferences.\nClick Next to begin.",
+            "type": "single_choice",
+            "options": [],
+            "default": "None"}
+        }
+    )
     p1 = Process(target=run_expert_system, args=(shared_data,))
     p1.start()
     RadioSetChangedApp().run()
