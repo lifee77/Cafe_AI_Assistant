@@ -6,7 +6,7 @@
 recommend(acr):- \+wifi(strong),
 	\+budget_category(one),
 	noise_level(noisy),
-	diet(none),
+	diet_restriction(none),
 	arrive_mean_time(Y), length_stay(Z), Y + Z =< 17,
 	\+dinner,
 	travel_distance(X), X >= 0.8.
@@ -14,7 +14,7 @@ recommend(acr):- \+wifi(strong),
 
 %Maria's market cafe
 recommend(mmc):- noise_level(moderate),
-	diet(none),
+	diet_restriction(none),
 	\+arrive_time(evening),
 	arrive_mean_time(Y), length_stay(Z), Y + Z =< 16,
 	\+breakfast,
@@ -25,7 +25,7 @@ recommend(mmc):- noise_level(moderate),
 %The English Rose Café and Tea Shop
 recommend(erc):- \+computer(need_charge), \+budget_category(one),
 	noise_level(moderate),
-	\+diet(vegt), \+diet(gluten_free),
+	\+diet_restriction(vegt), \+diet_restriction(gluten_free),
 	\+arrive_time(evening),
 	arrive_mean_time(Y), length_stay(Z), Y + Z =< 17,
 	\+lunch,
@@ -34,7 +34,7 @@ recommend(erc):- \+computer(need_charge), \+budget_category(one),
 	
 
 recommend(mola_cafe):- noise_level(quiet),
-	\+diet(vegt), \+diet(gluten_free),
+	\+diet_restriction(vegt), \+diet_restriction(gluten_free),
 	\+arrive_time(evening),
 	arrive_mean_time(Y), length_stay(Z), Y + Z =< 16,
 	\+dinner,
@@ -44,7 +44,7 @@ recommend(mola_cafe):- noise_level(quiet),
 %Gecko Coffeehouse
 recommend(gecko):- \+budget_category(one),
 	noise_level(quiet),
-	\+diet(vegt), \+diet(gluten_free),
+	\+diet_restriction(vegt), \+diet_restriction(gluten_free),
 	\+arrive_time(evening),
 	arrive_mean_time(Y), length_stay(Z), Y + Z =< 17,
 	\+dinner,
@@ -55,7 +55,7 @@ recommend(pinch):- wifi(none),
 	\+computer(need_charge),
 	\+budget_category(one),
 	noise_level(noisy),
-	\+diet(vegt), \+diet(gluten_free),
+	\+diet_restriction(vegt), \+diet_restriction(gluten_free),
 	\+arrive_time(evening),
 	arrive_mean_time(Y), length_stay(Z), Y + Z =< 15,
 	\+lunch,
@@ -67,7 +67,7 @@ recommend(pinch):- wifi(none),
 recommend(whb):- \+computer(need_charge),
 	\+budget_category(one),
 	noise_level(noisy),
-	\+diet(vegan), \+diet(gluten_free),
+	\+diet_restriction(vegan), \+diet_restriction(gluten_free),
 	\+arrive_time(evening),
 	arrive_mean_time(Y), length_stay(Z), Y + Z =< 17,
 	\+dinner,
@@ -75,7 +75,7 @@ recommend(whb):- \+computer(need_charge),
 
 %Pret A Manager
 recommend(pret_a):- noise_level(noisy),
-	\+diet(vegan), \+diet(gluten_free),
+	\+diet_restriction(vegan), \+diet_restriction(gluten_free),
 	arrive_mean_time(Y), length_stay(Z), Y + Z =< 20.5,
 	\+dinner,
 	travel_distance(X), X >= 0.4.
@@ -86,7 +86,7 @@ noise_level(quiet):- wifi(strong).
 noise_level(X):- ask(noise_level, X). %noise_level can have values quiet, moderate, noisy (or maybe dont_care for last option)
 work(X):- ask(work, X). % work can have values meeting, no_meeting, none
 computer(X):- ask(computer, X). % computer can have values need_charge, no_need_charge
-diet(X):- ask(diet, X). % diet can have values vegan, vegt, gluten_free, none.
+diet_restriction(X):- ask(diet_restriction, X). % diet can have values vegan, vegt, gluten_free, none.
 
 arrive_time(X):- ask(arrive_time, X). % arrive_time can be morning, afternoon, evening.
 arrive_mean_time(9.5):- arrive_time(morning).

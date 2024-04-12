@@ -2,6 +2,21 @@
 from pyswip.prolog import Prolog
 from pyswip.easy import Functor, Variable, registerForeign, call, Atom
 
+askables = {
+    "work": ["meeting", "no_meeting", "none"],
+    "wifi": ["strong", "normal", "none"],
+    "noise_level": ["quiet", "moderate", "noisy"],
+    "computer": ["need_charge", "no_need_charge"],
+    "diet_restriction": ["vegan", "vegt", "gluten_free", "none"], # multiple possible
+    "arrive_time": ["morning", "afternoon", "evening"], # multiple possible
+    "breakfast": ["yes", "no"],
+    "lunch": ["yes", "no"],
+    "dinner": ["yes", "no"],
+    "length_stay": float(),
+    "travel_distance": float(),
+    "budget_category": ["one", "two", "three"]
+}
+
 prolog = Prolog() # Global handle to interpreter
 
 retractall = Functor("retractall")
@@ -29,4 +44,4 @@ call(retractall(known))
 rec = [s for s in prolog.query("recommend(X)", maxresult=1)]
 print(" I recommend " + (rec[0]['X'] + "." if rec else "unknown."))
 
-print(list(prolog.query("known(A, V)")))
+#print(list(prolog.query("known(A, V)")))
