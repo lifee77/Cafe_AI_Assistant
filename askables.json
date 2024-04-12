@@ -28,7 +28,7 @@
         "type": "single_choice"
     },
     "noise_level": {
-        "text": "What is the maximum noise level you can tolerate?",
+        "text": "What is the noise level you prefer in a cafe?",
         "options": [
             {"id": "quiet", "text": "Quiet"},
             {"id": "moderate", "text": "Moderate"},
@@ -47,7 +47,7 @@
         "type": "single_choice"
     },
     "diet_restrictions": {
-        "text": "What dietary restrictions do you have?\n(Select all that apply)",
+        "text": "What dietary restrictions do you have?\n(Multiple choice; Select all that apply)",
         "options": [
             {"id": "vegan", "text": "Vegan"},
             {"id": "vegt", "text": "Vegetarian"},
@@ -58,7 +58,7 @@
         "type": "multi_choice"
     },
     "arrive_times": {
-        "text": "At what times do you want to go to the cafe?\n(Select all that apply)",
+        "text": "At what times do you want to go to the cafe?\n(Multiple choice; Select all that apply)",
         "options": [
             {"id":"morning", "text": "In the morning (7am - 12pm)"},
             {"id": "afternoon", "text": "In the afternoon (12pm - 4pm)"},

@@ -20,8 +20,13 @@ from logic import run_expert_system
 shared_data = {
     "curr_question": {
         "id": "no_id",
-        "text": "Hello and welcome to the AI Cafe Recommender Assistant.\n\
-I can recommend a lovely cafe in London based on your preferences.\nClick Next to begin.",
+        "text": """Hello and welcome to the AI Cafe Recommender Assistant.
+I can recommend a lovely cafe in London based on your preferences.
+
+This is a textual user interface. You can select single or multiple options using
+your mouse. Press [N] to go to the next question.
+
+Click Next to begin.""",
         "type": "single_choice",
         "options": [],
         "default": "None",
@@ -133,9 +138,13 @@ if __name__ == "__main__":
         {
             "curr_question": {
                 "id": "no_id",
-                "text": "Hello and welcome to the AI Cafe Recommender Assistant.\n\
-I can recommend a lovely cafe in London based on your preferences.\nClick Next to begin.",
-                "type": "single_choice",
+                "text": """Hello and welcome to the AI Cafe Recommender Assistant.
+I can recommend a lovely cafe in London based on your preferences.
+
+This is a textual user interface. You can select single or multiple options using
+your mouse. Press [N] to go to the next question.
+
+Click Next to begin.""",
                 "options": [],
                 "default": "None",
             }
