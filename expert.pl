@@ -6,7 +6,6 @@
 recommend(acr):- \+wifi(strong),
 	\+budget_category(one),
 	noise_level(noisy),
-	diet_restriction(none),
 	arrive_mean_time(Y), length_stay(Z), Y + Z =< 17,
 	\+dinner,
 	travel_distance(X), X >= 0.8.
@@ -14,8 +13,6 @@ recommend(acr):- \+wifi(strong),
 
 %Maria's market cafe
 recommend(mmc):- noise_level(moderate),
-	diet_restriction(none),
-	\+arrive_time(evening),
 	arrive_mean_time(Y), length_stay(Z), Y + Z =< 16,
 	\+breakfast,
 	\+dinner,
@@ -25,8 +22,7 @@ recommend(mmc):- noise_level(moderate),
 %The English Rose Café and Tea Shop
 recommend(erc):- \+computer(need_charge), \+budget_category(one),
 	noise_level(moderate),
-	\+diet_restriction(vegt), \+diet_restriction(gluten_free),
-	\+arrive_time(evening),
+	diet_ok(vegan),
 	arrive_mean_time(Y), length_stay(Z), Y + Z =< 17,
 	\+lunch,
 	\+dinner,
@@ -34,8 +30,7 @@ recommend(erc):- \+computer(need_charge), \+budget_category(one),
 	
 
 recommend(mola_cafe):- noise_level(quiet),
-	\+diet_restriction(vegt), \+diet_restriction(gluten_free),
-	\+arrive_time(evening),
+	diet_ok(vegan),
 	arrive_mean_time(Y), length_stay(Z), Y + Z =< 16,
 	\+dinner,
 	travel_distance(X), X >= 0.5.
@@ -44,8 +39,7 @@ recommend(mola_cafe):- noise_level(quiet),
 %Gecko Coffeehouse
 recommend(gecko):- \+budget_category(one),
 	noise_level(quiet),
-	\+diet_restriction(vegt), \+diet_restriction(gluten_free),
-	\+arrive_time(evening),
+	diet_ok(gluten_free),
 	arrive_mean_time(Y), length_stay(Z), Y + Z =< 17,
 	\+dinner,
 	travel_distance(X), X >=1.3.
@@ -55,8 +49,7 @@ recommend(pinch):- wifi(none),
 	\+computer(need_charge),
 	\+budget_category(one),
 	noise_level(noisy),
-	\+diet_restriction(vegt), \+diet_restriction(gluten_free),
-	\+arrive_time(evening),
+	diet_ok(vegan),
 	arrive_mean_time(Y), length_stay(Z), Y + Z =< 15,
 	\+lunch,
 	\+dinner,
@@ -67,15 +60,14 @@ recommend(pinch):- wifi(none),
 recommend(whb):- \+computer(need_charge),
 	\+budget_category(one),
 	noise_level(noisy),
-	\+diet_restriction(vegan), \+diet_restriction(gluten_free),
-	\+arrive_time(evening),
+	diet_ok(vegt),
 	arrive_mean_time(Y), length_stay(Z), Y + Z =< 17,
 	\+dinner,
 	travel_distance(X), X >= 1.2.
 
 %Pret A Manager
 recommend(pret_a):- noise_level(noisy),
-	\+diet_restriction(vegan), \+diet_restriction(gluten_free),
+	diet_ok(vegt),
 	arrive_mean_time(Y), length_stay(Z), Y + Z =< 20.5,
 	\+dinner,
 	travel_distance(X), X >= 0.4.
@@ -86,12 +78,24 @@ noise_level(quiet):- wifi(strong).
 noise_level(X):- ask(noise_level, X). %noise_level can have values quiet, moderate, noisy (or maybe dont_care for last option)
 work(X):- ask(work, X). % work can have values meeting, no_meeting, none
 computer(X):- ask(computer, X). % computer can have values need_charge, no_need_charge
-diet_restriction(X):- ask(diet_restriction, X). % diet can have values vegan, vegt, gluten_free, none.
+diet_restrictions(X):- ask(diet_restriction, X). % diet_restrictions is a list of values vegan, vegt, gluten_free, none.
+%represents diet restrictions that the user is okay with
+%[vegan, gluten_free] means that the user is fine with vegan or gluten_free or both
+%[none] indicates the user is okay with any diet
+diet_ok(_):- diet_restrictions([X]), X == none.
+diet_ok(vegan):- diet_restrictions(X), member(vegan, X).
+diet_ok(gluten_free):- diet_restrictions(X), member(gluten_free, X).
+diet_ok(vegt):- diet_restrictions(X), member(vegt, X).
 
-arrive_time(X):- ask(arrive_time, X). % arrive_time can be morning, afternoon, evening.
-arrive_mean_time(9.5):- arrive_time(morning).
-arrive_mean_time(14):- arrive_time(afternoon).
-arrive_mean_time(18.5):- arrive_time(evening).
+arrive_times(X):- ask(arrive_times, X). % arrive_times is a list of values morning: 7am-12pm, afternoon:12-4pm, evening:4-9pm.
+%represents the possible arrival times by the user
+
+can_arrive(morning):- arrive_times(X), member(morning, X). %can_arrive is one of those values
+can_arrive(afternoon):- arrive_times(X), member(afternoon, X).
+can_arrive(evening):- arrive_times(X), member(evening, X).
+arrive_mean_time(9.5):- can_arrive(morning). %mean time within the arrive_time range
+arrive_mean_time(14):- can_arrive(afternoon).
+arrive_mean_time(18.5):- can_arrive(evening).
 
 breakfast:- ask(breakfast, X), X \== no.
 lunch:- ask(lunch, X), X \== no.
@@ -105,11 +109,11 @@ ask(A, V):-
 known(A, V), % succeed if true
 !.	% stop looking
 
-ask(A, V):-
-known(A, X), % fail if something else
+ask(A, _):-
+known(A, _), % fail if something else
 !, fail.
 
 ask(A, V):-
-read_input(A, V, Y), % in future, V is a list of multiple responses
+read_input2(A, V, Y), % in future, V is a list of multiple responses
 assertz(known(A, Y)),
 V = Y. % if V is not bound, succeed, else check if it is same as Y
