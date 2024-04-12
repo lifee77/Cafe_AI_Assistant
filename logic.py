@@ -7,7 +7,7 @@ prolog = Prolog() # Global handle to interpreter
 retractall = Functor("retractall")
 known = Functor("known",2)
 
-def read_categorical(A, V, Y):
+def read_input(A, V, Y):
     if isinstance(Y, Variable):
         response = input(f"What is {A}? ")
         if str(A) in ["travel_distance", "length_stay"]:
@@ -19,9 +19,9 @@ def read_categorical(A, V, Y):
         return False
 
 
-read_categorical.arity = 3
+read_input.arity = 3
 
-registerForeign(read_categorical)
+registerForeign(read_input)
 
 prolog.consult("expert.pl") # open the KB for consulting
 
