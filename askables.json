@@ -8,19 +8,21 @@
     "work": {
         "text": "Do you wish to work at the cafe?",
         "options": [
-            "meeting",
-            "no_meeting",
-            "none"
+            {"id": "meeting",
+            "text": "Yes, I will be in an online meeting or class"},
+            {"id": "no_meeting",
+            "text": "Yes, I will be doing other work on my computer"},
+            {"id": "none", "text": "No, I will not be working at the cafe"}
         ],
         "default": "none",
         "type": "single_choice"
     },
     "wifi": {
-        "text": "What strength of wifi do you need (if any)?",
+        "text": "What strength of WiFi do you need (if any)?",
         "options": [
-            "strong",
-            "normal",
-            "none"
+            {"id": "strong", "text": "I need strong WiFi"},
+            {"id": "normal", "text": "I could use normal WiFi"},
+            {"id": "none", "text": "I don't need WiFi"}
         ],
         "default": "none",
         "type": "single_choice"
@@ -28,9 +30,9 @@
     "noise_level": {
         "text": "What is the maximum noise level you can tolerate?",
         "options": [
-            "quiet",
-            "moderate",
-            "noisy"
+            {"id": "quiet", "text": "Quiet"},
+            {"id": "moderate", "text": "Moderate"},
+            {"id": "noisy", "text": "Noisy"}
         ],
         "default": "quiet",
         "type": "single_choice"
@@ -38,8 +40,8 @@
     "computer": {
         "text": "Are you the responsible type or type to forget to charge your computer before going out?",
         "options": [
-            "need_charge",
-            "no_need_charge"
+            {"id": "need_charge", "text": "My computer/device may need charging"},
+            {"id":"no_need_charge", "text": "My computer/device will not need charging"}
         ],
         "default": "need_charge",
         "type": "single_choice"
@@ -47,10 +49,10 @@
     "diet_restrictions": {
         "text": "What dietary restrictions do you have?",
         "options": [
-            "vegan",
-            "vegt",
-            "gluten_free",
-            "none"
+            {"id": "vegan", "text": "Vegan"},
+            {"id": "vegt", "text": "Vegetarian"},
+            {"id":"gluten_free", "text": "Gluten Free"},
+            {"id": "none", "text": "None (I'm fine with all options)"}
         ],
         "default": "none",
         "type": "multi_choice"
@@ -58,9 +60,9 @@
     "arrive_times": {
         "text": "At what times do you want to go to the cafe?",
         "options": [
-            "morning",
-            "afternoon",
-            "evening"
+            {"id":"morning", "text": "In the morning (7am - 12pm)"},
+            {"id": "afternoon", "text": "In the afternoon (12pm - 4pm)"},
+            {"id":"evening", "text": "In the evening (4pm - 9pm"}
         ],
         "default": "afternoon",
         "type": "multi_choice"
@@ -68,8 +70,8 @@
     "breakfast": {
         "text": "Do you want to have breakfast at the cafe?",
         "options": [
-            "yes",
-            "no"
+            {"id": "yes", "text": "Yes"},
+            {"id": "no", "text": "No"}
         ],
         "default": "no",
         "type": "single_choice"
@@ -77,8 +79,8 @@
     "lunch": {
         "text": "Do you want to have lunch at the cafe?",
         "options": [
-            "yes",
-            "no"
+            {"id": "yes", "text": "Yes"},
+            {"id": "no", "text": "No"}
         ],
         "default": "no",
         "type": "single_choice"
@@ -86,8 +88,8 @@
     "dinner": {
         "text": "Do you want to have dinner at the cafe?",
         "options": [
-            "yes",
-            "no"
+            {"id": "yes", "text": "Yes"},
+            {"id": "no", "text": "No"}
         ],
         "default": "no",
         "type": "single_choice"
@@ -95,7 +97,12 @@
     "length_stay": {
         "text": "How long do you plan to stay in a cafe?",
         "options": [
-            "1.0"
+            {"id": "ls_a", "text": "At most 30 minutes", "value": "0.5"},
+            {"id": "ls_b", "text": "30 mins to 1hr","value": "1.0"},
+            {"id": "ls_c", "text": "1 to 2 hrs","value": "1.5"},
+            {"id": "ls_d", "text": "2 to 3 hrs","value": "2.5"},
+            {"id": "ls_e", "text": "3 to 4 hrs","value": "3.5"},
+            {"id": "ls_f", "text": "4+ hrs","value": "4.5"}
         ],
         "default": "1.0",
         "type": "single_choice"
@@ -103,7 +110,10 @@
     "travel_distance": {
         "text": "How far are you willing to travel from the residence hall (maximum)?",
         "options": [
-            "10.0"
+            {"id": "td_a", "text": "15 minute walk (about 1 mile)", "value": "0.8"},
+            {"id":"td_b", "text": "30 minute walk (about 1.5 miles)", "value": "1.6"},
+            {"id": "td_c", "text": "45 minute walk (about 2.5 miles)", "value": "2.4"},
+            {"id": "td_d", "text": "30 minute bus ride (about 4 miles)", "value": "4.0"}
         ],
         "default": "10.0",
         "type": "single_choice"
@@ -111,9 +121,9 @@
     "budget_category": {
         "text": "What is your budget for a visit to the cafe?",
         "options": [
-            "one",
-            "two",
-            "three"
+            {"id": "one", "text": "0-10 pounds"},
+            {"id":"two", "text": "10-20 pounds"},
+            {"id": "three", "text": "20+ pounds"}
         ],
         "default": "two",
         "type": "single_choice"
