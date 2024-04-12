@@ -119,6 +119,6 @@ known(A, _), % fail if something else
 !, fail.
 
 ask(A, V):-
-read_input2(A, V, Y), % in future, V is a list of multiple responses
+read_input(A, V, Y), % in future, V is a list of multiple responses
 assertz(known(A, Y)),
 V = Y. % if V is not bound, succeed, else check if it is same as Y
