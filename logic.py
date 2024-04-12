@@ -52,9 +52,4 @@ def run_expert_system(shared_data):
     rec_id = rec[0]["X"] if rec else None
     shared_data["rec"] = cafes[rec_id] if rec_id else None
     shared_data["rec_id"] = rec_id
-    with open("rec.txt", "w") as f:
-        f.write(f"I recommend {rec_id}" if rec else "No recommendation.")
-        f.write(str(list(prolog.query("known(A, V)"))))
 
-
-#
