@@ -3,7 +3,7 @@ import time
 
 from textual.app import App, ComposeResult
 from textual.containers import Horizontal, VerticalScroll
-from textual.widgets import Label, RadioButton, RadioSet, Button, SelectionList
+from textual.widgets import Label, RadioButton, RadioSet, Button, SelectionList, Header, Footer
 from textual.reactive import reactive
 from textual import on
 
@@ -13,13 +13,17 @@ shared_data = {"curr_question": {"default": "None"}}
 
 class RecommenderApp(App[None]):
     CSS_PATH = "styles.tcss"
+    BINDINGS = [
+        ("n", "go_next", "Go to Next Question"),
+    ]
     selected_values = reactive([shared_data["curr_question"]["default"]])
     about_to_finish = False
     started = False
     has_radio = True
 
     def compose(self) -> ComposeResult:
-        # with VerticalScroll():
+        yield Header()
+        yield Footer()
         with Horizontal():
             yield Label(shared_data["curr_question"]["text"], id="curr_question")
         with Horizontal(id="focus_me"):
@@ -27,7 +31,7 @@ class RecommenderApp(App[None]):
         with Horizontal():
             yield Button("Next", id="next_btn", variant="success")
 
-    def on_button_pressed(self, event: Button.Pressed) -> None:
+    def action_go_next(self) -> None:
         if self.about_to_finish:
             self.exit()
             return
@@ -71,6 +75,10 @@ class RecommenderApp(App[None]):
                 )
                 self.selected_values = [shared_data["curr_question"]["default"]]
                 self.has_radio = False
+
+    def on_button_pressed(self, event: Button.Pressed) -> None:
+        self.action_go_next()
+        
 
     def on_mount(self) -> None:
         self.query_one("#focus_me").focus()
