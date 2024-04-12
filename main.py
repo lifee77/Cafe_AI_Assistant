@@ -9,38 +9,10 @@ from textual import on
 
 from logic import run_expert_system
 
-shared_data = {"curr_question": {"text": "Hello", "type": "single_choice", "options": [], "default": "Init"}}
+shared_data = {"curr_question": {"default": "None"}}
 
-
-# def init_worker(data):
-#     # declare scope of a new global variable
-#     global shared_data
-#     # store argument in the global variable for this process
-#     shared_data = data
-
-
-# def get_shared():
-#     global shared_data
-#     return shared_data
-
-
-# def set_shared(k, v):
-#     global shared_data
-#     shared_data[k] = v
-
-
-# def task(shared_data):
-#     # shared_data = get_shared()
-#     while True:
-#         now = datetime.now()
-#         if 0 <= now.time().second <= 30:
-#             shared_data["curr_question"] = "What is your name?"
-#         else:
-#             shared_data["curr_question"] = "Who are you?"
-
-
-class RadioSetChangedApp(App[None]):
-    CSS_PATH = "tut.tcss"
+class RecommenderApp(App[None]):
+    CSS_PATH = "styles.tcss"
     selected_values = reactive([shared_data["curr_question"]["default"]])
     about_to_finish = False
     started = False
@@ -52,7 +24,6 @@ class RadioSetChangedApp(App[None]):
             yield Label(shared_data["curr_question"]["text"], id="curr_question")
         with Horizontal(id="focus_me"):
             pass
-                
         with Horizontal():
             yield Button("Next", id="next_btn", variant="success")
 
@@ -72,21 +43,24 @@ class RadioSetChangedApp(App[None]):
             self.query_one(SelectionList).remove()
 
         if shared_data.get("done"):
-            link = shared_data["rec"]["link"]
+            rec = shared_data["rec"]
+            link = rec["link"] if rec else None
             self.query_one("#focus_me").remove()
             self.query_one("#next_btn", Button).label = "Finish"
-            self.query_one("#curr_question", Label).update(
-                f"I recommend {shared_data['rec']['name']}." + \
+            upd_message = (f"I recommend {rec['name']}." + \
                 ("" if not link else f" Check out the cafe here: {link}")
-            )
+                if rec else "I don't have a recommendation for your preferences.")
+            self.query_one("#curr_question", Label).update(upd_message)
             self.about_to_finish = True
         else:
             self.started = True
             if shared_data["curr_question"]["type"] == "single_choice":
                 radioset = RadioSet()
                 self.query_one("#focus_me").mount(radioset)
+                self.selected_values = [shared_data["curr_question"]["default"]]
                 for opt in shared_data["curr_question"]["options"]:
-                    radioset.mount(RadioButton(opt["text"], id=opt["id"])) # value = opt==shared_data["curr_question"]["default"]
+                    radioset.mount(RadioButton(opt["text"], id=opt["id"],
+                        value = opt["id"]==shared_data["curr_question"]["default"]))
                     radioset.focus()
                 self.has_radio = True
             else:
@@ -95,6 +69,7 @@ class RadioSetChangedApp(App[None]):
                         for opt in shared_data["curr_question"]["options"]]
                     )
                 )
+                self.selected_values = [shared_data["curr_question"]["default"]]
                 self.has_radio = False
 
     def on_mount(self) -> None:
@@ -123,7 +98,7 @@ I can recommend a lovely cafe in London based on your preferences.\nClick Next t
     )
     p1 = Process(target=run_expert_system, args=(shared_data,))
     p1.start()
-    RadioSetChangedApp().run()
+    RecommenderApp().run()
     p1.join()
 
 

@@ -47,7 +47,7 @@
         "type": "single_choice"
     },
     "diet_restrictions": {
-        "text": "What dietary restrictions do you have?",
+        "text": "What dietary restrictions do you have?\n(Select all that apply)",
         "options": [
             {"id": "vegan", "text": "Vegan"},
             {"id": "vegt", "text": "Vegetarian"},
@@ -58,7 +58,7 @@
         "type": "multi_choice"
     },
     "arrive_times": {
-        "text": "At what times do you want to go to the cafe?",
+        "text": "At what times do you want to go to the cafe?\n(Select all that apply)",
         "options": [
             {"id":"morning", "text": "In the morning (7am - 12pm)"},
             {"id": "afternoon", "text": "In the afternoon (12pm - 4pm)"},
@@ -104,7 +104,7 @@
             {"id": "ls_e", "text": "3 to 4 hrs","value": "3.5"},
             {"id": "ls_f", "text": "4+ hrs","value": "4.5"}
         ],
-        "default": "1.0",
+        "default": "ls_b",
         "type": "single_choice"
     },
     "travel_distance": {
@@ -115,7 +115,7 @@
             {"id": "td_c", "text": "45 minute walk (about 2.5 miles)", "value": "2.4"},
             {"id": "td_d", "text": "30 minute bus ride (about 4 miles)", "value": "4.0"}
         ],
-        "default": "10.0",
+        "default": "td_d",
         "type": "single_choice"
     },
     "budget_category": {
