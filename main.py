@@ -3,13 +3,22 @@ import time
 
 from textual.app import App, ComposeResult
 from textual.containers import Horizontal, VerticalScroll
-from textual.widgets import Label, RadioButton, RadioSet, Button, SelectionList, Header, Footer
+from textual.widgets import (
+    Label,
+    RadioButton,
+    RadioSet,
+    Button,
+    SelectionList,
+    Header,
+    Footer,
+)
 from textual.reactive import reactive
 from textual import on
 
 from logic import run_expert_system
 
 shared_data = {"curr_question": {"default": "None"}}
+
 
 class RecommenderApp(App[None]):
     CSS_PATH = "styles.tcss"
@@ -35,11 +44,15 @@ class RecommenderApp(App[None]):
         if self.about_to_finish:
             self.exit()
             return
-        shared_data[f"{shared_data['curr_question']['id']}_response"] = self.selected_values
+        shared_data[f"{shared_data['curr_question']['id']}_response"] = (
+            self.selected_values
+        )
 
         time.sleep(0.1)  # maybe wait for prolog?
         if not shared_data.get("done"):
-            self.query_one("#curr_question", Label).update(shared_data["curr_question"]["text"])
+            self.query_one("#curr_question", Label).update(
+                shared_data["curr_question"]["text"]
+            )
 
         if self.started and self.has_radio:
             self.query_one(RadioSet).remove()
@@ -51,9 +64,12 @@ class RecommenderApp(App[None]):
             link = rec["link"] if rec else None
             self.query_one("#focus_me").remove()
             self.query_one("#next_btn", Button).label = "Finish"
-            upd_message = (f"I recommend {rec['name']}." + \
-                ("" if not link else f" Check out the cafe here: {link}")
-                if rec else "I don't have a recommendation for your preferences.")
+            upd_message = (
+                f"I recommend {rec['name']}."
+                + ("" if not link else f" Check out the cafe here: {link}")
+                if rec
+                else "I don't have a recommendation for your preferences."
+            )
             self.query_one("#curr_question", Label).update(upd_message)
             self.about_to_finish = True
         else:
@@ -63,14 +79,26 @@ class RecommenderApp(App[None]):
                 self.query_one("#focus_me").mount(radioset)
                 self.selected_values = [shared_data["curr_question"]["default"]]
                 for opt in shared_data["curr_question"]["options"]:
-                    radioset.mount(RadioButton(opt["text"], id=opt["id"],
-                        value = opt["id"]==shared_data["curr_question"]["default"]))
+                    radioset.mount(
+                        RadioButton(
+                            opt["text"],
+                            id=opt["id"],
+                            value=opt["id"] == shared_data["curr_question"]["default"],
+                        )
+                    )
                     radioset.focus()
                 self.has_radio = True
             else:
                 self.query_one("#focus_me").mount(
-                    SelectionList(*[(opt["text"], opt["id"], opt["id"] == shared_data["curr_question"]["default"])
-                        for opt in shared_data["curr_question"]["options"]]
+                    SelectionList(
+                        *[
+                            (
+                                opt["text"],
+                                opt["id"],
+                                opt["id"] == shared_data["curr_question"]["default"],
+                            )
+                            for opt in shared_data["curr_question"]["options"]
+                        ]
                     )
                 )
                 self.selected_values = [shared_data["curr_question"]["default"]]
@@ -78,7 +106,6 @@ class RecommenderApp(App[None]):
 
     def on_button_pressed(self, event: Button.Pressed) -> None:
         self.action_go_next()
-        
 
     def on_mount(self) -> None:
         self.query_one("#focus_me").focus()
@@ -91,22 +118,20 @@ class RecommenderApp(App[None]):
         self.selected_values = self.query_one(SelectionList).selected
 
 
-
-
 if __name__ == "__main__":
     manager = Manager()
     shared_data = manager.dict(
-        {"curr_question": {
-            "text": "Hello and welcome to the AI Cafe Recommender Assistant.\n\
+        {
+            "curr_question": {
+                "text": "Hello and welcome to the AI Cafe Recommender Assistant.\n\
 I can recommend a lovely cafe in London based on your preferences.\nClick Next to begin.",
-            "type": "single_choice",
-            "options": [],
-            "default": "None"}
+                "type": "single_choice",
+                "options": [],
+                "default": "None",
+            }
         }
     )
     p1 = Process(target=run_expert_system, args=(shared_data,))
     p1.start()
     RecommenderApp().run()
     p1.join()
-
-
