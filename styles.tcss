@@ -1,0 +1,21 @@
+VerticalScroll {
+    align: center middle;
+}
+
+Horizontal {
+    align: center middle;
+}
+
+RadioSet {
+    width: 45%;
+    height: 100%;
+}
+
+#curr_question {
+    height: auto;
+}
+
+
+#start {
+    height: auto;
+}
