@@ -102,9 +102,9 @@ arrive_mean_time(9.5):- can_arrive(morning). %mean time within the arrive_time r
 arrive_mean_time(14):- can_arrive(afternoon).
 arrive_mean_time(18.5):- can_arrive(evening).
 
-breakfast:- ask(breakfast, X), X \== no.
-lunch:- ask(lunch, X), X \== no.
-dinner:- ask(dinner, X), X \== no.
+breakfast:- can_arrive(morning), ask(breakfast, X), X \== no.
+lunch:- can_arrive(afternoon), ask(lunch, X), X \== no.
+dinner:- can_arrive(evening), ask(dinner, X), X \== no.
 length_stay(X):- ask(length_stay, X).
 travel_distance(X):- ask(travel_distance, X).
 budget_category(X):- ask(budget_category, X). % one: 0-10, two: 10-20, three: 20+
@@ -119,6 +119,6 @@ known(A, _), % fail if something else
 !, fail.
 
 ask(A, V):-
-read_input(A, V, Y), % in future, V is a list of multiple responses
+read_input(A, V, Y), % Y is a list of multiple responses for some
 assertz(known(A, Y)),
 V = Y. % if V is not bound, succeed, else check if it is same as Y

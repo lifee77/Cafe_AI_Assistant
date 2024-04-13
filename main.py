@@ -58,11 +58,17 @@ class RecommenderApp(App[None]):
         if self.about_to_finish:
             self.exit()
             return
-        shared_data[f"{shared_data['curr_question']['id']}_response"] = (
-            self.selected_values
-        )
+        # question just answered
+        last_question = shared_data["curr_question"]["id"]
+        shared_data[f"{last_question}_response"] = self.selected_values
 
-        time.sleep(0.1)  # maybe wait for prolog?
+        # wait for prolog to send next question
+        # TODO: This could be infinite if prolog hangs
+        while (shared_data["curr_question"]["id"] == last_question
+            and not shared_data.get("done")
+        ):
+            pass
+
         if not shared_data.get("done"):
             self.query_one("#curr_question", Label).update(
                 shared_data["curr_question"]["text"]
