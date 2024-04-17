@@ -1,5 +1,12 @@
 # Cafe_AI_Assistant
 
+## This project is completed for CS152: Harnessing Artificial Intelligence Algorithms course at Minerva University.
+## This is a group project with the following contributors:
+### Joshua Mark
+### Jeevan Bhatta
+### Dilnaz Uasheva
+### Viktoriia Danutsa
+
 ## Running the application
 
 - (Optional) Create a [Python virtual environment](https://docs.python.org/3/library/venv.html)
